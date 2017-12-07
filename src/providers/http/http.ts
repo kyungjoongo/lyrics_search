@@ -39,5 +39,24 @@ export class HttpProvider {
             })
     }
 
+    getListBySearchTerm(term){
+
+        let youtubu_search_url= 'https://www.googleapis.com/youtube/v3/search?' +
+            'part=snippet\n' +
+            '&order=viewCount\n' +
+            '&type=video\n' +
+            '&videoDefinition=high'+
+            '&key='+ this.youtube_api_key+
+            '&q=';
+
+
+
+        return this.http.get(youtubu_search_url + term).map((res) => {
+            return res.json()['items'];
+        })
+
+
+    }
+
 
 }

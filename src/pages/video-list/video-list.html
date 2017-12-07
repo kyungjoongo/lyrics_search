@@ -6,24 +6,36 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>videoList</ion-title>
+  <ion-navbar color="secondary" style="text-align: center">
+    <ion-title class="Lobster">Music Video Search</ion-title>
   </ion-navbar>
+    <ion-row>
+        <ion-col col-9="">
+            <ion-input type="text" [(ngModel)]="term" placeholder="검색어"
+                       (keyup.enter)="onKey()" value="gym class hero"></ion-input>
+        </ion-col>
+
+        <ion-col col-3="">
+            <button float-right  ion-button="" (click)="doSearch()" item-right="">search</button>
+        </ion-col>
+
+
+    </ion-row>
 
 </ion-header>
 
 
 <ion-content >
 
-    <ion-card ion-item *ngFor="let list of playlists  " (click)="openVideo2(list)">
+    <ion-card ion-item *ngFor="let item of playlists  " (click)="openVideo(item)">
         <ion-thumbnail item-start>
 
-            <img [src]="list.snippet.thumbnails.default.url">
+            <img [src]="item.snippet.thumbnails.default.url">
 
 
         </ion-thumbnail>
-        <h2 text-wrap="">{{ list.snippet.title }}</h2>
-        <p>{{ list.snippet.publishedAt | date:'short' }}</p>
+        <h2 text-wrap="">{{ item.snippet.title }}</h2>
+        <p>{{ item.snippet.publishedAt | date:'short' }}</p>
     </ion-card>
 
 </ion-content>

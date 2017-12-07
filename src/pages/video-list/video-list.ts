@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams, Platform} from 'ionic-angular';
 import {YoutubeVideoPlayer} from "@ionic-native/youtube-video-player";
 import {HttpProvider} from "../../providers/http/http";
 import {InAppBrowser} from '@ionic-native/in-app-browser';
@@ -16,11 +16,25 @@ export class VideoListPage {
     apiKey: string = 'AIzaSyCUMLRaMiBgIcQiOwR--735jG-Dhgvg8B8';
     playlists: any;
     title: string;
+    term: String;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public httpProvider: HttpProvider
-        , private youtube: YoutubeVideoPlayer, private plt: Platform, private   iab: InAppBrowser) {
+    constructor(public navCtrl: NavController
+        , public navParams: NavParams
+        , public httpProvider: HttpProvider
+        , private youtube: YoutubeVideoPlayer
+        , public loadingCtrl: LoadingController
+        , private plt: Platform, private   iab: InAppBrowser) {
 
         var playListId = this.navParams.get("playListId");
+
+        /*        this.getVideoListByTerm();*/
+
+
+    }
+
+
+    getVideoListByTerm() {
+
 
         let _paylistId = 'PL7MQjbfOyOE0nisdJuVQfuyV2GTYZze59';
         this.title = this.navParams.get("title");
@@ -28,8 +42,6 @@ export class VideoListPage {
             this.playlists = response;
             console.log(response);
         })
-
-
     }
 
     isEmptyObject(obj) {
@@ -37,33 +49,54 @@ export class VideoListPage {
     }
 
 
-    openVideo(video) {
 
 
+    openVideo(item) {
 
         /*if (this.plt.is('cordova')) {
+            this.youtube.openVideo(item.id.videoId);
+        } else {
+            var browser = this.iab.create('https://www.youtube.com/watch?v=' + item.id.videoId, '_blank', 'location=no,toolbar=no');
+        }*/
 
-            alert(video.snippet.resourceId.videoId );
-            this.youtube.openVideo(video.snippet.resourceId.videoId);
-        } else {*/
-            //window.open('https://www.youtube.com/watch?v=' + video.snippet.resourceId.videoId);
-            var browser = this.iab.create('https://www.youtube.com/watch?v=' + video.snippet.resourceId.videoId, '_blank', 'location=no,toolbar=no');
-        //}
+        var browser = this.iab.create('https://www.youtube.com/watch?v=' + item.id.videoId, '_blank', 'location=no,toolbar=no');
     }
 
-    openVideo2(list){
-        /*var url = 'https://www.googleapis.com/youtube/v3/search?q=';*/
 
-        let _url2= 'https://www.googleapis.com/youtube/v3/search?' +
-                    'part=snippet\n' +
-                    '&order=viewCount\n' +
-                    '&q=skateboarding+dog\n' +
-                    '&type=video\n' +
-                    '&videoDefinition=high'+
-                    '&apiKey='+ this.apiKey;
+    doSearch() {
+        this.getVideoList();
+    }
+
+    onKey() {
+
+        this.getVideoList();
+    }
+
+    getVideoList(){
+
+        let loader = this.loadingCtrl.create({
+            content: 'Loading videos..'
+        });
+
+        loader.present().then(()=>{
+
+            this.httpProvider.getListBySearchTerm(this.term).subscribe(response => {
+                this.playlists = response;
+
+                loader.dismiss();
+            })
+
+        })
+    }
 
 
-        var browser = this.iab.create(_url2, '_blank', 'location=no,toolbar=no');
+
+
+    playVideo() {
+
+        let playVideoId = 'fsbW4U2Mwfk';
+
+        let url = 'https://www.youtube.com/watch?v=' + playVideoId;
     }
 
 }
