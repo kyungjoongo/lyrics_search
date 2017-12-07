@@ -1,17 +1,49 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
+    <ion-navbar color="danger">
+        <ion-title>가사검색</ion-title>
+    </ion-navbar>
+    <ion-row>
+        <ion-col col-9="">
+            <ion-input type="text" [(ngModel)]="term" placeholder="가사내용 ,노래제목 ,가수이름등 (검색어)"
+                       (keyup.enter)="onKey()" value="잠 못드는 밤"></ion-input>
+        </ion-col>
+
+        <ion-col col-3="">
+            <button float-right  ion-button="" (click)="doSearch()" item-right="">search</button>
+        </ion-col>
+
+
+    </ion-row>
 </ion-header>
 
-<ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+
+<ion-content overflow-scroll="true">
+
+    <ion-list>
+
+
+        <ion-item (click)="goLyrics(resultOne.result.url)" *ngFor="let resultOne of resultList; let i = index" >
+            <ion-avatar item-start>
+                <img [src]="resultOne.result.header_image_thumbnail_url">
+            </ion-avatar>
+            <a style="color: #2043ff" >{{resultOne.result.primary_artist.name}}</a> <br/>
+
+
+
+            {{resultOne.result.full_title}}
+        </ion-item>
+        <!--<ion-card (click)="goLyrics(resultOne.result.url)" *ngFor="let resultOne of resultList; let i = index">
+            <ion-card-content>
+                <img [src]="resultOne.result.header_image_url">
+                <p>
+                    {{resultOne.result.full_title}}
+                </p>
+
+            </ion-card-content>
+
+        </ion-card>
+-->
+
+    </ion-list>
 </ion-content>
+
